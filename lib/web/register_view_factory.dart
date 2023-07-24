@@ -41,7 +41,7 @@ class ViewFactoryWeb extends ViewFactoryPlugin {
             ..width = width.toInt()
             ..height = height.toInt(),
           html.ScriptElement()
-            ..innerHtml = VideoJsScripts().videojsCode(
+            ..text = VideoJsScripts().videojsCode(
               playerId,
               videoJsOptions,
               qualitySelector: qualitySelector,

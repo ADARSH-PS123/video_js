@@ -9,10 +9,10 @@ class VideoJsScripts {
 
     callBackToDartSide('$playerId', 'onPlayerReady' , 'true');
     });
-    ${qualitySelector ? """
-player.httpSourceSelector();
 
-    """ : ""}
+
+    ${qualitySelector ? """
+player.httpSourceSelector();""" : ""}
     """;
 
   String globalAutoSetup(bool status) => """

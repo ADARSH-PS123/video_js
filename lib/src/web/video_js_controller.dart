@@ -1,11 +1,12 @@
 import 'dart:developer';
+import 'dart:js';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:video_js_themed/src/models/videojs_options.dart';
 import 'package:video_js_themed/src/web/video_js_scripts.dart';
 import 'package:video_js_themed/src/web/video_results.dart';
-
 
 class VideoJsController {
   final String playerId;
@@ -17,9 +18,8 @@ class VideoJsController {
     this.videoJsOptions,
     this.qualitySelector = false,
   });
-String disposeTime = '0';
 
-
+ 
 
   /// This function is for initial a video.js instance with options
   videoJs(Function(String) onReady, {VideoJsOptions? videoJsOptions}) {
@@ -34,6 +34,7 @@ String disposeTime = '0';
     html.querySelector('body')!.children.add(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'onPlayerReady', onReady);
   }
+  
 
   /// to set video source by type
   /// [type] can be video/mp4, video/webm, application/x-mpegURL (for hls videos), ...
@@ -106,14 +107,18 @@ String disposeTime = '0';
       ..id = "toggleFullScreen"
       ..innerHtml = VideoJsScripts().toggleFullScreenMode(playerId);
     html.Element? ele = html.querySelector("#toggleFullScreen");
+    
+
     if (html.querySelector("#toggleFullScreen") != null) {
       ele!.remove();
     }
+ 
     html.querySelector('body')!.children.add(scriptElement);
+   
   }
 
   /// this function is for check video player full screen status
-  isFullScreen(Function(String) onFullScreenStatus) {
+  isFullScreen(Function(String) onFullScreenStatus)async {
     final html.Element scriptElement = html.ScriptElement()
       ..id = "isFullScreen"
       ..innerHtml = VideoJsScripts().isFullScreen(playerId);
@@ -122,6 +127,7 @@ String disposeTime = '0';
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
+   await Future.delayed( const Duration(milliseconds: 300));
     VideoJsResults()
         .listenToValueFromJs(playerId, 'isFull', onFullScreenStatus);
   }
@@ -211,7 +217,8 @@ String disposeTime = '0';
     }
     html.querySelector('body')!.children.add(scriptElement);
   }
-  getCurrentTime(Function(String) onCurrentTime){
+
+  getCurrentTime(Function(String) onCurrentTime) {
     final html.Element scriptElement = html.ScriptElement()
       ..id = "getCurrentTime"
       ..innerHtml = VideoJsScripts().getCurrentTime(playerId);
@@ -220,8 +227,7 @@ String disposeTime = '0';
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults()
-        .listenToValueFromJs(playerId, 'getCurrent', onCurrentTime);
+    VideoJsResults().listenToValueFromJs(playerId, 'getCurrent', onCurrentTime);
   }
 
   /// Video whole time in seconds
@@ -291,10 +297,8 @@ String disposeTime = '0';
     VideoJsResults().listenToValueFromJs(playerId, 'getPoster', onPosterGet);
   }
 
-
-
-isPlayerReady(Function(String) isReady){
-      final html.Element scriptElement = html.ScriptElement()
+  isPlayerReady(Function(String) isReady) {
+    final html.Element scriptElement = html.ScriptElement()
       ..id = "isReady"
       ..innerHtml = VideoJsScripts().isReady(playerId);
     html.Element? ele = html.querySelector("#isReady");
@@ -303,7 +307,8 @@ isPlayerReady(Function(String) isReady){
     }
     html.querySelector('body')!.children.add(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'isPlayerReady', isReady);
-}
+  }
+
   /// Add callback to be triggered on playback start
   onPlay(Function(String) onPlay) {
     final html.Element scriptElement = html.ScriptElement()
@@ -314,8 +319,7 @@ isPlayerReady(Function(String) isReady){
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults()
-        .listenToValueFromJs(playerId, 'onPlay', onPlay);
+    VideoJsResults().listenToValueFromJs(playerId, 'onPlay', onPlay);
   }
 
   /// Add callback to be triggered on playback end
@@ -328,14 +332,12 @@ isPlayerReady(Function(String) isReady){
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults()
-        .listenToValueFromJs(playerId, 'onEnd', onEnd);
+    VideoJsResults().listenToValueFromJs(playerId, 'onEnd', onEnd);
   }
 
   /// This method is available on all Video.js players and components.
   /// It is the only supported method of removing a Video.js player from both the DOM and memory.
   dispose() {
-    log('fffffff');
     final html.Element scriptElement = html.ScriptElement()
       ..id = "dispose"
       ..innerHtml = VideoJsScripts().dispose(playerId);
@@ -350,7 +352,6 @@ isPlayerReady(Function(String) isReady){
     }
   }
 
- 
 //    addDurationListener(Function(String) duration) {
 //  if (html.querySelector("#addDurationListener") == null) {
 //        final html.Element scriptElement = html.ScriptElement()
@@ -364,25 +365,6 @@ isPlayerReady(Function(String) isReady){
 //     VideoJsResults()
 //         .listenToMyStream(playerId, 'durationListener', duration);
 //     }
-   
+
 //   }
-
-
-addDurationListener(Function(String) duration) {
- if (html.querySelector("#addDurationListener") == null) {
-       final html.Element scriptElement = html.ScriptElement()
-      ..id = "addDurationListener"
-      ..innerHtml = VideoJsScripts().durationListenerJ(playerId);
-    html.Element? ele = html.querySelector("#addDurationListener");
-    
-    html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults()
-        .listenToMyStream(playerId, 'durationListener', duration);
-    }
-
-    else{
-      log('--not empty---');
-    }
-   
-  }
 }

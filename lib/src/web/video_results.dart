@@ -26,11 +26,15 @@ class VideoJsResults {
 
   /// this function need to call on app's main method to register call back's from javascript side
   init() {
+
    context['callBackToDartSide'] = (playerId, type, value) {
       _onVolumeFromJsStream.sink.add(ResultFromVideoJs(
           playerId.toString(), type.toString(), value.toString()));
     };
+
   }
+
+
   addMyListener() {
    context['callBackToMyListener'] = (playerId, type, value) {
       _onVolumeFromJsStream.sink.add(ResultFromVideoJs(
@@ -56,21 +60,7 @@ class VideoJsResults {
     });
   }
 
-  listenToMyStream(String playerId, String type, Function(String) onJsValue){
- StreamSubscription? subscription;
-    subscription = VideoJsResults()
-        .onStreamFromJs
-        .stream
-        .listen((ResultFromVideoJs resultFromVideoJs) {
-          log(resultFromVideoJs.result.toString()+"------");
-      if (playerId == resultFromVideoJs.videoId &&
-          type == resultFromVideoJs.type) {
-      
-       onJsValue(resultFromVideoJs.result);
-    
-      }
-    });
-  }
+ 
 
 
 closeMyStream(){

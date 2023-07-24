@@ -1,3 +1,4 @@
+import 'dart:js';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
@@ -35,7 +36,12 @@ class VideoJsWidgetState extends State<VideoJsWidget> {
   void dispose() {
   
 
-    widget.videoJsController.dispose();
+
+
+
+ widget.videoJsController.dispose();
+
+
     html.Element? ele = html.querySelector('#div$elementId');
     if (html.querySelector('#div$elementId') != null) {
       ele!.remove();
@@ -45,8 +51,12 @@ class VideoJsWidgetState extends State<VideoJsWidget> {
       print('VideoJsWidget disposed');
     }
 
+
+   
+
     super.dispose();
   }
+
 
   @override
   void initState() {
@@ -88,17 +98,20 @@ class VideoJsWidgetState extends State<VideoJsWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: kIsWeb
-          ? HtmlElementView(
-              viewType: elementId,
-            )
-          : const Center(
-              child: Text('Video_js plugin just supported on web'),
-            ),
-    );
+  Widget build(BuildContext co) {
+    return  SizedBox(
+          width: widget.width,
+          height: widget.height,
+          child: kIsWeb
+              ? HtmlElementView(
+                
+                  viewType: elementId,
+                 
+                
+                )
+              : const Center(
+                  child: Text('Video_js plugin just supported on web'),
+                ),
+        );
   }
 }
