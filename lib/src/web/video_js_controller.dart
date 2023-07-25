@@ -1,8 +1,8 @@
 import 'dart:developer';
-import 'dart:js';
+
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+
 import 'package:universal_html/html.dart' as html;
 import 'package:video_js_themed/src/models/videojs_options.dart';
 import 'package:video_js_themed/src/web/video_js_scripts.dart';
