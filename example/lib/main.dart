@@ -315,6 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   VideoJsWidget(
+                    sources: [],
                     videoJsController: videoJsController,
                     height: MediaQuery.of(context).size.width / 2.5,
                     width: MediaQuery.of(context).size.width / 1.5,
