@@ -111,6 +111,12 @@ console.log("ready worked------------);
     callBackToDartSide('$playerId', 'isFull' , String(player.isFullscreen()));
     });""";
 
+      String isFullScreenV2(String playerId) => """
+    var player = videojs.getPlayer('$playerId');
+    player.ready(function() {
+    isFullScreenV2('$playerId', 'isFull' , String(player.isFullscreen()));
+    });""";
+
   String requestFullscreen(String playerId) => """
     var player = videojs.getPlayer('$playerId');
     player.ready(function() {
@@ -150,6 +156,8 @@ console.log("ready worked------------);
     callBackToDartSide('$playerId', 'getCurrent' , currentTime);
     });""";
 
+   
+
   String setCurrentTime(String playerId, String timeInSecond) => """
     var player = videojs.getPlayer('$playerId');
     player.ready(function() {
@@ -162,6 +170,42 @@ console.log("ready worked------------);
     var lengthOfVideo = player.duration();
     callBackToDartSide('$playerId', 'getDuration' , lengthOfVideo);
     });""";
+
+      String totalDurationV2(String playerId) => """
+    var player = videojs.getPlayer('$playerId');
+
+    if(player){
+ player.ready(function() {
+    var lengthOfVideo = player.duration();
+    totalDurationV2('$playerId', 'totalDurationV2' , lengthOfVideo);
+    });
+    }
+    else{
+      totalDurationV2('$playerId', 'totalDurationV2' , 0.0);
+    }
+   
+    """;
+
+
+      String currentDurationV2(String playerId) => """
+    var player = videojs.getPlayer('$playerId');
+
+    if(player){
+ player.ready(function() {
+    var lengthOfVideo = player.currentTime();
+    currentDurationV2('$playerId', 'currentDurationV2' , lengthOfVideo);
+    });
+    }
+    else{
+      currentDurationV2('$playerId', 'currentDurationV2' , 0.0);
+    }
+   
+    """;
+
+    
+
+
+
 
   String remainingTime(String playerId) => """
     var player = videojs.getPlayer('$playerId');

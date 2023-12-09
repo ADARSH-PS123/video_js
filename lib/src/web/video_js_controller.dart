@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:flutter/foundation.dart';
 
 import 'package:universal_html/html.dart' as html;
@@ -19,8 +18,6 @@ class VideoJsController {
     this.qualitySelector = false,
   });
 
- 
-
   /// This function is for initial a video.js instance with options
   videoJs(Function(String) onReady, {VideoJsOptions? videoJsOptions}) {
     final html.Element scriptElement = html.ScriptElement()
@@ -34,7 +31,6 @@ class VideoJsController {
     html.querySelector('body')!.children.add(scriptElement);
     VideoJsResults().listenToValueFromJs(playerId, 'onPlayerReady', onReady);
   }
-  
 
   /// to set video source by type
   /// [type] can be video/mp4, video/webm, application/x-mpegURL (for hls videos), ...
@@ -107,29 +103,28 @@ class VideoJsController {
       ..id = "toggleFullScreen"
       ..innerHtml = VideoJsScripts().toggleFullScreenMode(playerId);
     html.Element? ele = html.querySelector("#toggleFullScreen");
-    
 
     if (html.querySelector("#toggleFullScreen") != null) {
       ele!.remove();
     }
- 
+
     html.querySelector('body')!.children.add(scriptElement);
-   
   }
 
-  /// this function is for check video player full screen status
-  isFullScreen(Function(String) onFullScreenStatus)async {
+
+
+  isFullScreenV2(Function(String) onFullScreenStatus) async {
     final html.Element scriptElement = html.ScriptElement()
       ..id = "isFullScreen"
-      ..innerHtml = VideoJsScripts().isFullScreen(playerId);
+      ..innerHtml = VideoJsScripts().isFullScreenV2(playerId);
     html.Element? ele = html.querySelector("#isFullScreen");
     if (html.querySelector("#isFullScreen") != null) {
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-   await Future.delayed( const Duration(milliseconds: 300));
-    VideoJsResults()
-        .listenToValueFromJs(playerId, 'isFull', onFullScreenStatus);
+    VideoJsResults().isFullScreenV2((p0) {
+      onFullScreenStatus(p0);
+    });
   }
 
   /// To change player to full screen mode
@@ -193,19 +188,6 @@ class VideoJsController {
     VideoJsResults().listenToValueFromJs(playerId, 'isPaused', onPauseStatus);
   }
 
-  /// To get video's current playing time in seconds
-  currentTime(Function(String) onCurrentTime) {
-    final html.Element scriptElement = html.ScriptElement()
-      ..id = "currentTime"
-      ..innerHtml = VideoJsScripts().getCurrentTime(playerId);
-    html.Element? ele = html.querySelector("#currentTime");
-    if (html.querySelector("#currentTime") != null) {
-      ele!.remove();
-    }
-    html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().listenToValueFromJs(playerId, 'getCurrent', onCurrentTime);
-  }
-
   /// Set video
   setCurrentTime(String currentTime) {
     final html.Element scriptElement = html.ScriptElement()
@@ -218,30 +200,28 @@ class VideoJsController {
     html.querySelector('body')!.children.add(scriptElement);
   }
 
-  getCurrentTime(Function(String) onCurrentTime) {
-    final html.Element scriptElement = html.ScriptElement()
-      ..id = "getCurrentTime"
-      ..innerHtml = VideoJsScripts().getCurrentTime(playerId);
-    html.Element? ele = html.querySelector("#getCurrentTime");
-    if (html.querySelector("#getCurrentTime") != null) {
-      ele!.remove();
-    }
-    html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().listenToValueFromJs(playerId, 'getCurrent', onCurrentTime);
-  }
-
-  /// Video whole time in seconds
-  durationTime(Function(String) onDurationTime) {
+  totalDurationV2(Function(String) fun) {
     final html.Element scriptElement = html.ScriptElement()
       ..id = "durationTime"
-      ..innerHtml = VideoJsScripts().duration(playerId);
+      ..innerHtml = VideoJsScripts().totalDurationV2(playerId);
     html.Element? ele = html.querySelector("#durationTime");
     if (html.querySelector("#durationTime") != null) {
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults()
-        .listenToValueFromJs(playerId, 'getDuration', onDurationTime);
+    VideoJsResults().totalDurationV2((p0) => fun(p0));
+  }
+
+  currentDurationV2(Function(String) fun) {
+    final html.Element scriptElement = html.ScriptElement()
+      ..id = "durationTime"
+      ..innerHtml = VideoJsScripts().currentDurationV2(playerId);
+    html.Element? ele = html.querySelector("#durationTime");
+    if (html.querySelector("#durationTime") != null) {
+      ele!.remove();
+    }
+    html.querySelector('body')!.children.add(scriptElement);
+    VideoJsResults().currentDurationV2((p0) => fun(p0));
   }
 
   /// Video remain time in seconds
@@ -351,20 +331,4 @@ class VideoJsController {
       log('VideoJsController disposed');
     }
   }
-
-//    addDurationListener(Function(String) duration) {
-//  if (html.querySelector("#addDurationListener") == null) {
-//        final html.Element scriptElement = html.ScriptElement()
-//       ..id = "addDurationListener"
-//       ..innerHtml = VideoJsScripts().durationListener(playerId);
-//     html.Element? ele = html.querySelector("#addDurationListener");
-//     if (html.querySelector("#addDurationListener") != null) {
-//       ele!.remove();
-//     }
-//     html.querySelector('body')!.children.add(scriptElement);
-//     VideoJsResults()
-//         .listenToMyStream(playerId, 'durationListener', duration);
-//     }
-
-//   }
 }

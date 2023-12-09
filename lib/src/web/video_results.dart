@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:developer';
 
 import 'package:universal_html/js.dart';
 
@@ -8,13 +8,9 @@ import 'package:video_js_themed/src/models/result_from_videojs.dart';
 class VideoJsResults {
   final StreamController<ResultFromVideoJs> _onVolumeFromJsStream =
       StreamController<ResultFromVideoJs>.broadcast();
-       final StreamController<ResultFromVideoJs> _onMyStreamFromJs =
-      StreamController<ResultFromVideoJs>.broadcast();
 
   StreamController<ResultFromVideoJs> get onVolumeFromJsStream =>
       _onVolumeFromJsStream;
-  StreamController<ResultFromVideoJs> get onStreamFromJs =>
-      _onMyStreamFromJs;
 
   VideoJsResults._privateConstructor();
 
@@ -26,19 +22,29 @@ class VideoJsResults {
 
   /// this function need to call on app's main method to register call back's from javascript side
   init() {
-
-   context['callBackToDartSide'] = (playerId, type, value) {
+    context['callBackToDartSide'] = (playerId, type, value) {
       _onVolumeFromJsStream.sink.add(ResultFromVideoJs(
           playerId.toString(), type.toString(), value.toString()));
     };
-
   }
 
+  totalDurationV2(void Function(String) duration) {
+    context['totalDurationV2'] = (playerId, type, value) {
+  
+      duration(value.toString());
+    };
+  }
 
-  addMyListener() {
-   context['callBackToMyListener'] = (playerId, type, value) {
-      _onVolumeFromJsStream.sink.add(ResultFromVideoJs(
-          playerId.toString(), type.toString(), value.toString()));
+   currentDurationV2(void Function(String) duration) {
+    context['currentDurationV2'] = (playerId, type, value) {
+  
+      duration(value.toString());
+    };
+  }
+   isFullScreenV2(void Function(String) isFullScreen) {
+    context['isFullScreenV2'] = (playerId, type, value) {
+  
+      isFullScreen(value.toString());
     };
   }
 
@@ -58,16 +64,5 @@ class VideoJsResults {
         subscription!.cancel();
       }
     });
-  }
-
- 
-
-
-closeMyStream(){
-  _onMyStreamFromJs.close();
-}
-  /// close StreamController
-  close() {
-    _onVolumeFromJsStream.close();
   }
 }

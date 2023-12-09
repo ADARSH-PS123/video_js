@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:video_js_themed/video_js.dart';
 
@@ -310,6 +312,23 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              ElevatedButton(onPressed: (){
+              videoJsController.currentDurationV2((p0) {
+                log(p0+'------------current----------------');
+              });
+              }, child: Text('current duration')),
+              //  ElevatedButton(onPressed: (){
+              // videoJsController.totalDurationV2((p0) {
+              //   log(p0+'------total----------------------');
+              // });
+              // }, child: Text('total duration')),
+
+              
+               ElevatedButton(onPressed: (){
+              videoJsController.isFullScreenV2((p0) {
+                log(p0+'------is fullscreen----------------------');
+              });
+              }, child: Text('is full screen')),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -425,7 +444,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        videoJsController.currentTime((val) {
+                        videoJsController.currentDurationV2((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
@@ -529,7 +548,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        videoJsController.isFullScreen((val) {
+                        videoJsController.isFullScreenV2((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
@@ -592,7 +611,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   ElevatedButton(
                       onPressed: () {
-                        videoJsController.durationTime((val) {
+                        videoJsController.currentDurationV2((val) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               duration: const Duration(milliseconds: 500),
                               content: Text(
