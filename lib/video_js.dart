@@ -6,3 +6,4 @@ export 'package:video_js_themed/src/models/source.dart';
 export 'package:video_js_themed/src/web/video_js_controller.dart';
 export 'package:video_js_themed/src/models/result_from_videojs.dart';
 export 'package:video_js_themed/src/web/video_results.dart';
+

@@ -313,6 +313,8 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ElevatedButton(onPressed: (){
+                log(videoJsController.isPlayerRegistered(playerId).toString()+' is registered---');
+                
               videoJsController.currentDurationV2((p0) {
                 log(p0+'------------current----------------');
               });
@@ -325,6 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
               
                ElevatedButton(onPressed: (){
+                
               videoJsController.isFullScreenV2((p0) {
                 log(p0+'------is fullscreen----------------------');
               });

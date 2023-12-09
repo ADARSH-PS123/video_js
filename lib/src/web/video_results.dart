@@ -30,20 +30,20 @@ class VideoJsResults {
 
   totalDurationV2(void Function(String) duration) {
     context['totalDurationV2'] = (playerId, type, value) {
-  
       duration(value.toString());
     };
   }
 
-   currentDurationV2(void Function(String) duration) {
+ 
+
+  currentDurationV2(void Function(String) duration) {
     context['currentDurationV2'] = (playerId, type, value) {
-  
       duration(value.toString());
     };
   }
-   isFullScreenV2(void Function(String) isFullScreen) {
+
+  isFullScreenV2(void Function(String) isFullScreen) {
     context['isFullScreenV2'] = (playerId, type, value) {
-  
       isFullScreen(value.toString());
     };
   }

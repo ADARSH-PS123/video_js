@@ -29,7 +29,9 @@ class VideoJsController {
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().listenToValueFromJs(playerId, 'onPlayerReady', onReady);
+    onReady('true');
+
+    // VideoJsResults().listenToValueFromJs(playerId, 'onPlayerReady', onReady);
   }
 
   /// to set video source by type
@@ -111,8 +113,6 @@ class VideoJsController {
     html.querySelector('body')!.children.add(scriptElement);
   }
 
-
-
   isFullScreenV2(Function(String) onFullScreenStatus) async {
     final html.Element scriptElement = html.ScriptElement()
       ..id = "isFullScreen"
@@ -122,9 +122,14 @@ class VideoJsController {
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().isFullScreenV2((p0) {
-      onFullScreenStatus(p0);
-    });
+
+    if (isPlayerRegistered(playerId)) {
+      VideoJsResults().isFullScreenV2((p0) {
+        onFullScreenStatus(p0);
+      });
+    } else {
+      onFullScreenStatus('false');
+    }
   }
 
   /// To change player to full screen mode
@@ -209,7 +214,11 @@ class VideoJsController {
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().totalDurationV2((p0) => fun(p0));
+    if (isPlayerRegistered(playerId)) {
+      VideoJsResults().totalDurationV2((p0) => fun(p0));
+    } else {
+      fun('0');
+    }
   }
 
   currentDurationV2(Function(String) fun) {
@@ -221,7 +230,11 @@ class VideoJsController {
       ele!.remove();
     }
     html.querySelector('body')!.children.add(scriptElement);
-    VideoJsResults().currentDurationV2((p0) => fun(p0));
+    if (isPlayerRegistered(playerId)) {
+      VideoJsResults().currentDurationV2((p0) => fun(p0));
+    } else {
+      fun('0.0');
+    }
   }
 
   /// Video remain time in seconds
@@ -315,6 +328,10 @@ class VideoJsController {
     VideoJsResults().listenToValueFromJs(playerId, 'onEnd', onEnd);
   }
 
+  bool isPlayerRegistered(String playerId) {
+    return VideoJsScripts().isRegistered(playerId);
+  }
+
   /// This method is available on all Video.js players and components.
   /// It is the only supported method of removing a Video.js player from both the DOM and memory.
   dispose() {
@@ -330,5 +347,6 @@ class VideoJsController {
     if (kDebugMode) {
       log('VideoJsController disposed');
     }
+    VideoJsScripts().clearRegisterMap(playerId);
   }
 }

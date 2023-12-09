@@ -1,19 +1,31 @@
 class VideoJsScripts {
+  static Map<String, bool> _isRegistered = {};
+  bool isRegistered(String playerId) {
+    return _isRegistered[playerId] ?? false;
+  }
+
+  clearRegisterMap(String playerId){
+_isRegistered.removeWhere((key, value) => key==playerId);
+  }
+
   String videojsCode(
     String playerId,
     Map<String, dynamic>? options, {
     bool qualitySelector = false,
-  }) =>
-      """
+  }) {
+    _isRegistered[playerId] = true;
+
+    return """
     var player = videojs('$playerId', $options,function() {
-
-    callBackToDartSide('$playerId', 'onPlayerReady' , 'true');
+  
+  
     });
-
-
+  
+  
     ${qualitySelector ? """
-player.httpSourceSelector();""" : ""}
+  player.httpSourceSelector();""" : ""}
     """;
+  }
 
   String globalAutoSetup(bool status) => """
     videojs.options.autoSetup = '$status';""";
@@ -111,7 +123,7 @@ console.log("ready worked------------);
     callBackToDartSide('$playerId', 'isFull' , String(player.isFullscreen()));
     });""";
 
-      String isFullScreenV2(String playerId) => """
+  String isFullScreenV2(String playerId) => """
     var player = videojs.getPlayer('$playerId');
     player.ready(function() {
     isFullScreenV2('$playerId', 'isFull' , String(player.isFullscreen()));
@@ -156,8 +168,6 @@ console.log("ready worked------------);
     callBackToDartSide('$playerId', 'getCurrent' , currentTime);
     });""";
 
-   
-
   String setCurrentTime(String playerId, String timeInSecond) => """
     var player = videojs.getPlayer('$playerId');
     player.ready(function() {
@@ -171,7 +181,7 @@ console.log("ready worked------------);
     callBackToDartSide('$playerId', 'getDuration' , lengthOfVideo);
     });""";
 
-      String totalDurationV2(String playerId) => """
+  String totalDurationV2(String playerId) => """
     var player = videojs.getPlayer('$playerId');
 
     if(player){
@@ -181,13 +191,13 @@ console.log("ready worked------------);
     });
     }
     else{
+     
       totalDurationV2('$playerId', 'totalDurationV2' , 0.0);
     }
    
     """;
 
-
-      String currentDurationV2(String playerId) => """
+  String currentDurationV2(String playerId) => """
     var player = videojs.getPlayer('$playerId');
 
     if(player){
@@ -197,15 +207,11 @@ console.log("ready worked------------);
     });
     }
     else{
+       console.log('else case-------');
       currentDurationV2('$playerId', 'currentDurationV2' , 0.0);
     }
    
     """;
-
-    
-
-
-
 
   String remainingTime(String playerId) => """
     var player = videojs.getPlayer('$playerId');
